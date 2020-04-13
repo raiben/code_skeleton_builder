@@ -1,0 +1,6 @@
+QTextBrowser {
+  background-color: transparent;
+  background-image: url(./presenter/ui/logo.png);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}

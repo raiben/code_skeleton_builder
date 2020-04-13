@@ -1,0 +1,6 @@
+airspeed==0.5.14
+cachetools==4.1.0
+Pygments==2.6.1
+PySide2==5.14.2
+shiboken2==5.14.2
+six==1.14.0

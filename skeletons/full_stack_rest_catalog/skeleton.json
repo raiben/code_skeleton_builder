@@ -1,0 +1,153 @@
+{
+  "description": "A Full-stack REST API, including our Clean Architecture standards",
+  "variables": [
+    {
+      "name": "Project path",
+      "type": "file",
+      "description": "Please, select your project folder",
+      "variable_name": "project_path",
+      "autofill": "",
+      "depends_on": ""
+    },
+    {
+      "name": "Current main app (natural language)",
+      "type": "str",
+      "description": "Name of the the main Django app. Example: \"abcde\"",
+      "variable_name": "django_main_app_natural",
+      "autofill": "",
+      "depends_on": ""
+    },
+    {
+      "name": "Django main app name",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "django_main_app",
+      "autofill": "f'{snake(django_main_app_natural)}'",
+      "depends_on": "django_main_app_natural"
+    },
+    {
+      "name": "Django app (natural language)",
+      "type": "str",
+      "description": "Name of the the django app. Example: \"code checks\"",
+      "variable_name": "django_app_natural",
+      "autofill": "",
+      "depends_on": ""
+    },
+    {
+      "name": "Django app name",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "django_app",
+      "autofill": "f'{snake(django_app_natural)}'",
+      "depends_on": "django_app_natural"
+    },
+    {
+      "name": "Catalog resource name (natural language)",
+      "type": "str",
+      "description": "Name of the catalog resource in singular. Example: \"custom fields\"",
+      "variable_name": "resource_name_singular_natural",
+      "autofill": "",
+      "depends_on": ""
+    },
+    {
+      "name": "Catalog resource name",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "resource_name_singular",
+      "autofill": "f'{snake(resource_name_singular_natural)}'",
+      "depends_on": "resource_name_singular_natural"
+    },
+    {
+      "name": "Catalog resources name",
+      "type": "str",
+      "description": "Name of the catalog resource in plural",
+      "variable_name": "resource_name_plural",
+      "autofill": "f'{resource_name_singular}s'",
+      "depends_on": "resource_name_singular"
+    },
+    {
+      "name": "API URLs path",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "api_urls_path",
+      "autofill": "f'{project_path}/{snake(django_app)}/api_urls.py'",
+      "depends_on": "django_app, project_path"
+    },
+    {
+      "name": "View path",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "view_path",
+      "autofill": "f'{project_path}/{snake(django_app)}/views/{snake(resource_name_plural)}_view.py'",
+      "depends_on": "django_app, resource_name_plural, project_path"
+    },
+    {
+      "name": "View namespace",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "view_namespace",
+      "autofill": "f'{snake(resource_name_singular)}.views'",
+      "depends_on": "django_app, resource_name_plural, project_path"
+    },
+    {
+      "name": "View class name",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "view_class_name",
+      "autofill": "f'{camel(resource_name_singular)}View'",
+      "depends_on": "resource_name_singular"
+    },
+    {
+      "name": "View Reverse URL name",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "view_reverse_url_name",
+      "autofill": "f'{snake(resource_name_singular)}_view'",
+      "depends_on": "resource_name_singular"
+    },
+    {
+      "name": "Request parameters",
+      "type": "str",
+      "description": "Comma-separated parameters of the catalog view. Example: user id, name",
+      "variable_name": "get_parameters",
+      "autofill": "",
+      "depends_on": ""
+    },
+    {
+      "name": "Use Case Entity path",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "use_case_entity_path",
+      "autofill": "f'{project_path}/{snake(django_app)}/entities/{snake(resource_name_plural)}_request_entity.py'",
+      "depends_on": "django_app, resource_name_plural, project_path"
+    },
+    {
+      "name": "Use Case Entity class name",
+      "type": "str",
+      "description": "(Automatically filled)",
+      "variable_name": "use_case_entity_class_name",
+      "autofill": "f'{camel(resource_name_singular)}RequestEntity'",
+      "depends_on": "resource_name_singular"
+    }
+  ],
+  "resources": [
+    {
+      "name": "urls.py",
+      "description": "URL router registry",
+      "file_path": "urls.py",
+      "target_route": "f'{project_path}/{django_main_app}/urls.py'"
+    },
+    {
+      "name": "api_urls.py",
+      "description": "URL endpoint mapping",
+      "file_path": "api_urls.py",
+      "target_route": "f'{api_urls_path}'"
+    },
+    {
+      "name": "view.py",
+      "description": "REST API View",
+      "file_path": "view.py",
+      "target_route": "f'{view_path}'"
+    }
+  ]
+}
