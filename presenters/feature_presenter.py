@@ -26,6 +26,27 @@ def camel(text: str):
     return ''.join(words)
 
 
+def snake_list(text: str):
+    items = text.split(',')
+    snake_items = [snake(item.strip()) for item in items if item.strip() != '']
+    return ', '.join(snake_items)
+
+
+def path_to_namespace(path: str, parents_to_ignore):
+    relative_path = path[len(parents_to_ignore):] if path.startswith(parents_to_ignore) else path
+    path_without_extension = relative_path.split('.')[0]
+    return path_without_extension.replace('/', '.')
+
+
+def join_parameters(*args):
+    all_the_arguments = []
+    for text in args:
+        items = text.split(',')
+        all_the_arguments = all_the_arguments + [item.strip() for item in items if item.strip() != '']
+
+    return ', '.join(all_the_arguments)
+
+
 CURRENT_FOLDER_LIST = __file__.split('/')[:-1]
 UI_FILE = '/'.join(CURRENT_FOLDER_LIST + ['ui', 'feature.ui'])
 
@@ -60,6 +81,7 @@ class FeaturePresenter(FeaturePresenterInterface):
         self.button_box = self.widget.findChild(QDialogButtonBox, 'button_box')  # type: QDialogButtonBox
         self.button_box.rejected.connect(self._cancel)
         self.button_box.accepted.connect(self._accept)
+        self.button_box.clicked.connect(self._clicked)
 
         app_singleton.set_content(self.widget)
         app_singleton.show()
@@ -149,7 +171,7 @@ class FeaturePresenter(FeaturePresenterInterface):
         widget = line_edit
 
         def button_clicked():
-            #url, _ = QFileDialog.getOpenFileUrl(line_edit, 'Select directory','~', 'Only directories', '*')
+            # url, _ = QFileDialog.getOpenFileUrl(line_edit, 'Select directory','~', 'Only directories', '*')
             directory = QFileDialog.getExistingDirectory(widget, "Select Folder", '')
             widget.setText(directory)
 
@@ -216,7 +238,18 @@ class FeaturePresenter(FeaturePresenterInterface):
     def _accept(self):
         variable_values = {}
         for variable, widget in self.variable_widget_map.items():
-            variable_values[variable.variable_name] = widget.text()
+            value = widget.text()
+
+            variable_values[variable.variable_name] = value
+            if variable.type == 'List[str]':
+                items = [item.strip() for item in value.split(',')]
+                variable_values[variable.variable_name + '__items'] = items
 
         use_case = DisplayFilesUseCase(self.feature, variable_values)
         use_case.run()
+
+    def _clicked(self, button=None):
+        if button.text() == 'Reset':
+            for node in self.first_node.children:
+                widget = self.variable_widget_map[node.value]
+                widget.setText('')

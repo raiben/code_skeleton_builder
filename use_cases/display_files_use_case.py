@@ -10,7 +10,6 @@ class DisplayFilesUseCase(object):
         self.files = []
 
     def run(self):
-        # TODO: build the files
         self._retrieve_files()
 
         presenter = ObjectFactory.build_instance(FilesPresenterInterface, self.feature, self.files)
